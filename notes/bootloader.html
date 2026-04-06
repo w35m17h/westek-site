@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burning Uno Bootloader to Pro Mini — WesTek Lab</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <span class="dot"></span>
+    WesTek
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../links.html">Links</a></li>
+    <li><a href="index.html" class="active">Notes</a></li>
+  </ul>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../index.html">WesTek</a>
+  <span class="sep">/</span>
+  <a href="index.html">Notes</a>
+  <span class="sep">/</span>
+  Burning Uno Bootloader to Pro Mini
+</div>
+
+<div class="note-content">
+
+  <div class="note-header">
+    <div class="note-meta">
+      <span class="tag">Arduino · AVR</span>
+      <span>WesTek Lab Procedure</span>
+      <span>April 2026</span>
+    </div>
+    <h1>Burning Uno Bootloader<br>to Arduino Pro Mini 3.3V 8MHz</h1>
+  </div>
+
+  <h2>Why This Is Needed</h2>
+
+  <p>
+    The Arduino Pro Mini ships with an Optiboot bootloader that does not disable
+    the watchdog timer (WDT) on startup. When firmware uses <code>wdt_enable()</code>
+    to trigger a software reset, the watchdog persists through the reset cycle.
+    The bootloader starts but does not disable the WDT, the watchdog fires again,
+    and the board is trapped in a reset loop — indicated by the onboard LED
+    flashing continuously.
+  </p>
+
+  <p>
+    The Arduino Uno version of Optiboot handles WDT correctly — it saves and
+    restores the MCUSR register and disables the watchdog before handing off
+    to the sketch. Burning the Uno bootloader onto the Pro Mini fixes this
+    while preserving 3.3V 8MHz operation.
+  </p>
+
+  <div class="callout warn">
+    <strong>Note</strong>
+    This is a known longstanding issue with the Pro Mini bootloader documented
+    by SparkFun and others. The fix is burning the Uno's version of Optiboot
+    which handles WDT correctly.
+  </div>
+
+  <h2>Hardware Required</h2>
+
+  <pre data-lang="hardware">Arduino Uno          (as ISP programmer)
+Arduino Pro Mini     3.3V 8MHz (target board)
+6x jumper wires</pre>
+
+  <h2>Wiring — Uno to Pro Mini</h2>
+
+  <table class="wire-table">
+    <thead>
+      <tr>
+        <th>Arduino Uno</th>
+        <th>Arduino Pro Mini</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>5V</td><td>VCC</td><td>Safe at 5V during programming</td></tr>
+      <tr><td>GND</td><td>GND</td><td>Common ground</td></tr>
+      <tr><td>Pin 10</td><td>RST</td><td>Reset control</td></tr>
+      <tr><td>Pin 11</td><td>Pin 11 (MOSI)</td><td>SPI data</td></tr>
+      <tr><td>Pin 12</td><td>Pin 12 (MISO)</td><td>SPI data</td></tr>
+      <tr><td>Pin 13</td><td>Pin 13 (SCK)</td><td>SPI clock</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>Safe Voltage</strong>
+    5V is safe for programming even though the Pro Mini is a 3.3V board.
+    The ATmega328P runs fine at 5V. Do not have any other 3.3V peripherals
+    connected to the Pro Mini during this procedure.
+  </div>
+
+  <h2>Step 1 — Load ArduinoISP onto Uno</h2>
+
+  <p>Load the ArduinoISP sketch onto the Uno first. This turns the Uno into
+  an in-system programmer.</p>
+
+  <pre data-lang="arduino ide">File → Examples → 11.ArduinoISP → ArduinoISP
+
+Select Uno as target board.
+Upload to Uno.</pre>
+
+  <h2>Step 2 — Burn Bootloader</h2>
+
+  <div class="callout critical">
+    <strong>Critical</strong>
+    Board must be set to <strong>Arduino Uno</strong> during the bootloader burn —
+    not Pro Mini. This selection determines which bootloader binary gets written.
+    Setting Pro Mini here burns the wrong bootloader and WDT will still fail.
+  </div>
+
+  <pre data-lang="arduino ide">Tools → Board     → Arduino Uno        ← MUST be Uno, not Pro Mini
+Tools → Programmer → Arduino as ISP
+Tools → Burn Bootloader
+
+Wait approximately 30 seconds for completion.</pre>
+
+  <h2>Step 3 — Upload Sketch</h2>
+
+  <p>After bootloader burn, disconnect the ISP wires from the Uno and connect
+  the FTDI adapter to the Pro Mini programming header.</p>
+
+  <pre data-lang="arduino ide">Tools → Board     → Arduino Pro or Pro Mini
+Tools → Processor → ATmega328P (3.3V, 8MHz)  ← back to Pro Mini
+Tools → Port      → FTDI port
+Upload sketch normally.</pre>
+
+  <div class="callout">
+    <strong>DTR Connection Required</strong>
+    The DTR pin must be connected between FTDI adapter and Pro Mini for
+    auto-reset during sketch upload. Without DTR, manually press the reset
+    button on the Pro Mini when the IDE shows "Uploading..."
+  </div>
+
+  <h2>Step 4 — Firmware WDT Pattern</h2>
+
+  <p>With the Uno bootloader installed, the following WDT pattern works correctly
+  in firmware:</p>
+
+  <pre data-lang="cpp">#include &lt;avr/wdt.h&gt;
+
+void setup() {
+  wdt_disable();  // MUST be first line — disables WDT left from previous reset
+  Serial.begin(57600);
+  // rest of setup...
+}
+
+// Software reset via watchdog:
+if (input == "z") {
+    Serial.println("OK RESETTING");
+    delay(100);              // flush serial buffer
+    wdt_enable(WDTO_15MS);  // enable watchdog, 15ms timeout
+    while(1) {}              // spin — watchdog fires, hardware reset
+}</pre>
+
+  <h2>Expected Behavior</h2>
+
+  <p>With the correct bootloader and firmware pattern, the reset command
+  produces a clean single reset:</p>
+
+  <pre data-lang="terminal">z
+OK RESETTING
+  → 15ms pause
+  → hardware reset fires
+  → bootloader disables WDT correctly
+  → sketch starts
+  → wdt_disable() called as first line
+READY WesTek ProtIoT RF-TX v0.1</pre>
+
+  <p>No reset loop. No LED flashing. Clean single reset and restart.</p>
+
+  <h2>Identifying Pro Mini Voltage Version</h2>
+
+  <p>Pro Mini boards are not always clearly labeled. To identify 3.3V vs 5V:</p>
+
+  <ul>
+    <li>Look for the crystal/resonator — <code>8.000</code> marking = 8MHz = 3.3V version</li>
+    <li>Look for the voltage regulator SOT-23-5 — marking <code>S2RA</code> = 3.3V LDO</li>
+    <li>Measure VCC pin with multimeter after powering via FTDI at 3.3V</li>
+  </ul>
+
+  <h2>Pro Mini Power in Final Installation</h2>
+
+  <p>
+    For permanent installation the Pro Mini VCC pin vs RAW pin distinction matters:
+  </p>
+
+  <ul>
+    <li><strong>RAW pin</strong> → feeds onboard LDO regulator → outputs 3.3V to ATmega. Accepts up to 16V input.</li>
+    <li><strong>VCC pin</strong> → bypasses LDO → feeds ATmega directly. Must be 3.3V.</li>
+  </ul>
+
+  <p>
+    For the WesTek ProtIoT RF coprocessor board, 5V is fed to the RAW pin.
+    The onboard LDO provides clean 3.3V to the ATmega. The 3.3V output from
+    the LDO powers the crystal 433MHz receiver module, keeping its data output
+    at 3.3V logic — directly compatible with the Pi GPIO without level shifting.
+  </p>
+
+  <div class="callout">
+    <strong>Upload Speed</strong>
+    Upload speed is automatically set to 57600 baud by the Arduino IDE board
+    definition for Pro Mini 3.3V 8MHz. No manual configuration needed.
+  </div>
+
+  <hr class="divider">
+
+  <p style="font-size:0.82rem; color: var(--text-dim);">
+    WesTek Lab · Pensacola FL · April 2026<br>
+    Procedure developed during ProtIoT RF Coprocessor build.
+  </p>
+
+</div>
+
+<footer>
+  <span>WesTek Lab</span> — Pensacola, FL &nbsp;·&nbsp;
+  Built on open source &nbsp;·&nbsp;
+  No cloud dependencies
+</footer>
+
+</body>
+</html>

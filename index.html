@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WesTek Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <span class="dot"></span>
+    WesTek
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="links.html">Links</a></li>
+    <li><a href="notes/index.html">Notes</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">WesTek Lab — Pensacola, FL</div>
+  <h1>Hardware, RF &amp;<br><span>Home Automation</span></h1>
+  <p class="hero-desc">
+    A retired FedEx engineer's home lab — pursuing embedded systems,
+    RF reverse engineering, AI agents, and home automation projects.
+    Built on open source tools, MQTT, and decades of hands-on experience
+    from Z80s and UV EPROMs to ESP32s and 433MHz OOK.
+  </p>
+  <div class="hero-meta">
+    <span>Location <span class="val">Pensacola FL</span></span>
+    <span>Stack <span class="val">Pi / ESP32 / MQTT / Node-RED</span></span>
+    <span>Since <span class="val">1982</span></span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Active Projects</div>
+  <div class="card-grid">
+
+    <a href="notes/protiot.html" class="card">
+      <div class="card-label">RF Gateway</div>
+      <div class="card-title">ProtIoT</div>
+      <div class="card-desc">433MHz RF gateway — EV1527/PT2262 decode, MQTT publish, Flask web GUI, dual serial RF coprocessors.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a href="notes/index.html" class="card">
+      <div class="card-label">AI Agent</div>
+      <div class="card-title">Wintermute</div>
+      <div class="card-desc">OpenClaw AI agent on VLAN 666. Reads consciousness-themed SF. Writes philosophical journal entries autonomously.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a href="notes/index.html" class="card">
+      <div class="card-label">Voice Endpoint</div>
+      <div class="card-title">Bad Janet</div>
+      <div class="card-desc">Pi Zero W voice endpoint. ReSpeaker HAT, Whisper STT, Gemini 2.5 Flash, espeak TTS, PiSugar3 battery.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a href="notes/index.html" class="card">
+      <div class="card-label">Dashboard</div>
+      <div class="card-title">CYD Kitchen Display</div>
+      <div class="card-desc">ESP32-2432S028 kitchen dashboard. SquareLine Studio UI, LVGL, MQTT toggle/state sync, 3D printed aqua case.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Lab Infrastructure</div>
+  <div class="card-grid">
+
+    <div class="card" style="cursor:default;">
+      <div class="card-label">Network</div>
+      <div class="card-title">UniFi + MikroTik</div>
+      <div class="card-desc">Multiple VLANs — IoT (172.16.100.x), Sandbox/VLAN 666, MikroTik isolation VLAN 600.</div>
+    </div>
+
+    <div class="card" style="cursor:default;">
+      <div class="card-label">Servers</div>
+      <div class="card-title">DietPi + Wintermute</div>
+      <div class="card-desc">hasrvr: Mosquitto, Node-RED, Gogs, Homer. Wintermute: i7-8700 Z370N, OpenClaw AI, VLAN 666.</div>
+    </div>
+
+    <div class="card" style="cursor:default;">
+      <div class="card-label">3D Printing</div>
+      <div class="card-title">Bambu A1</div>
+      <div class="card-desc">Enclosures, brackets, antenna housings, vase mode antenna covers, rack panel components.</div>
+    </div>
+
+    <div class="card" style="cursor:default;">
+      <div class="card-label">Test Equipment</div>
+      <div class="card-title">RF + Logic</div>
+      <div class="card-desc">RTL-SDR Blog V3, NanoVNA, Saleae clone + Logic 2, EICO DC Wideband oscilloscope (1960s).</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Quick Links</div>
+  <div class="card-grid">
+    <a href="links.html" class="card">
+      <div class="card-label">Reference</div>
+      <div class="card-title">Links</div>
+      <div class="card-desc">Local lab resources and curated external references — datasheets, tools, communities.</div>
+      <span class="card-arrow">→</span>
+    </a>
+    <a href="notes/index.html" class="card">
+      <div class="card-label">Documentation</div>
+      <div class="card-title">Lab Notes</div>
+      <div class="card-desc">Procedures, reverse engineering findings, build logs and technical reference documents.</div>
+      <span class="card-arrow">→</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <span>WesTek Lab</span> — Pensacola, FL &nbsp;·&nbsp;
+  Built on open source &nbsp;·&nbsp;
+  No cloud dependencies
+</footer>
+
+</body>
+</html>

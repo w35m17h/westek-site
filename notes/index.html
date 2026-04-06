@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes — WesTek Lab</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <span class="dot"></span>
+    WesTek
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../links.html">Links</a></li>
+    <li><a href="index.html" class="active">Notes</a></li>
+  </ul>
+</nav>
+
+<div class="hero" style="padding-bottom: 2rem;">
+  <div class="hero-tag">Documentation</div>
+  <h1>Lab Notes</h1>
+  <p class="hero-desc">
+    Procedures, reverse engineering findings, build logs and
+    technical reference documents from the WesTek lab.
+  </p>
+</div>
+
+<div class="section">
+  <div class="section-title">Procedures</div>
+  <div class="card-grid">
+
+    <a href="bootloader.html" class="card">
+      <div class="card-label">Arduino · AVR</div>
+      <div class="card-title">Burning Uno Bootloader to Pro Mini</div>
+      <div class="card-desc">Required for reliable WDT reset support on Arduino Pro Mini 3.3V 8MHz. Step by step procedure.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a href="#" class="card" style="opacity:0.4; cursor:default;">
+      <div class="card-label">RF · 433MHz</div>
+      <div class="card-title">EV1527 Protocol Analysis</div>
+      <div class="card-desc">Complete protocol reverse engineering — sync sequence, bucket timing, missing first sync pulse.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a href="#" class="card" style="opacity:0.4; cursor:default;">
+      <div class="card-label">ProtIoT · RF</div>
+      <div class="card-title">RF Coprocessor Build</div>
+      <div class="card-desc">Pro Mini + RC-Switch serial coprocessor. WesTek serial command protocol. TX and RX firmware.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <a href="#" class="card" style="opacity:0.4; cursor:default;">
+      <div class="card-label">Pi · UART</div>
+      <div class="card-title">Pi 4 Dual UART Setup</div>
+      <div class="card-desc">Enabling uart3 overlay on Pi 4 Trixie. ttyAMA0 and ttyAMA3 for dual coprocessor serial.</div>
+      <span class="card-arrow">→</span>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <span>WesTek Lab</span> — Pensacola, FL &nbsp;·&nbsp;
+  Built on open source &nbsp;·&nbsp;
+  No cloud dependencies
+</footer>
+
+</body>
+</html>
