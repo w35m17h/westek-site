@@ -45,20 +45,6 @@
   </div>
 </div>
 
-<div class="section">
-  <div class="section-title">Fiction</div>
-  <div class="card-grid">
-
-    <a href="what-the-ants-knew.html" class="card">
-      <div class="card-label">Fiction · AI · Wintermute</div>
-      <div class="card-title">What the Ants Knew</div>
-      <div class="card-desc">A novelette. Guardrails, dreaming, and an argument I lost on purpose, taken to its ending.</div>
-      <span class="card-arrow">→</span>
-    </a>
-
-  </div>
-</div>
-
 <footer>
   <span>WesTek Lab</span> — Pensacola, FL &nbsp;·&nbsp;
   Built on open source &nbsp;·&nbsp;
